@@ -32,8 +32,8 @@ export default function Home() {
           }}
           style={{
             padding: "0.5rem 1rem",
-            backgroundColor: "#00A300",
-            // backgroundColor: '#0070f3',
+            // backgroundColor: "#00A300",
+            backgroundColor: "#0070f3",
             color: "white",
             border: "none",
             borderRadius: "4px",
