@@ -52,6 +52,7 @@ jobs:
         with:
           node-version: "20"
       - run: npm ci
+      - run: npm run build
 
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
@@ -59,6 +60,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_TO_PROD: true
+          build_directory: .next
 
       # - name: Netlify deploy (production)
       #   uses: netlify/actions/cli@v4
