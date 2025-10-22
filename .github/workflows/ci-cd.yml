@@ -72,9 +72,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: |
-            .next
-            package.json
+          path: .next
 
   # Stage 4: Deploy
   deploy:
@@ -96,24 +94,10 @@ jobs:
         run: npm install netlify-cli@latest -g
 
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-artifact
-          path: ./
-
-      - name: Verify downloaded artifact
-        run: |
-          if [ ! -d ".next" ]; then
-            echo "Error: .next directory not found after artifact download"
-            exit 1
-          fi
-          if [ ! -f "package.json" ]; then
-            echo "Error: package.json not found after artifact download"
-            exit 1
-          fi
-          echo "Downloaded artifact successfully"
-          ls -la .next
-          ls -la package.json
+          path: .next
 
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
