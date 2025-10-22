@@ -43,15 +43,12 @@ jobs:
   # Stage 3: Build
   build:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     needs: [lint, test]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
 
       - name: Install dependencies
         run: npm ci
@@ -59,45 +56,22 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Verify build output
-        run: |
-          if [ ! -d ".next" ]; then
-            echo "Error: .next directory not found after build"
-            exit 1
-          fi
-          echo "Build directory .next exists"
-          ls -la .next
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: .next
-
   # Stage 4: Deploy
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     needs: build
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Install Netlify CLI
         run: npm install netlify-cli@latest -g
-
-      - name: Download artifact
-        uses: actions/download-artifact@v5
-        with:
-          name: build-artifact
-          path: .next
 
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
