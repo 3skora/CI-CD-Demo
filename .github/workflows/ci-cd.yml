@@ -60,7 +60,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: node:20-alpine # Use official Node.js Docker image
+      image: node:20-bullseye # Use official Node.js Docker image
     needs: build
     # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
