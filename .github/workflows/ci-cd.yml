@@ -12,15 +12,15 @@ on:
       - main
 
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "The branch to deploy"
-        required: true
-        default: "main"
-      environment:
-        description: "The environment to deploy to"
-        required: true
-        default: "production"
+    # inputs:
+    #   branch:
+    #     description: "The branch to deploy"
+    #     required: true
+    #     default: "main"
+    #   environment:
+    #     description: "The environment to deploy to"
+    #     required: true
+    #     default: "production"
 jobs:
   # Stage 1: Lint
   lint:
