@@ -5,85 +5,74 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "app/**"
   pull_request:
     branches:
       - main
-
   workflow_dispatch:
-    # inputs:
-    #   branch:
-    #     description: "The branch to deploy"
-    #     required: true
-    #     default: "main"
-    #   environment:
-    #     description: "The environment to deploy to"
-    #     required: true
-    #     default: "production"
 jobs:
   # Stage 1: Lint
   lint:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
+        uses: actions/checkout@v3 # owner/repo@ref
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run ESLint
         run: npm run lint
 
   # Stage 2: Test
   test:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run tests
         run: npm test
 
   # Stage 3: Build
   build:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     needs: [lint, test]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run build
         run: npm run build
 
   # Stage 4: Deploy
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # Use official Node.js Docker image
     needs: build
     # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3 # owner/repo@ref
-        with:
-          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Netlify CLI
         run: npm install netlify-cli@latest -g
+
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
         with:
