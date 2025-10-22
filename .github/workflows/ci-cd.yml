@@ -43,10 +43,12 @@ jobs:
   # Stage 3: Build
   build:
     runs-on: ubuntu-latest
-    container:
-      image: node:20-alpine # Use official Node.js Docker image
     needs: [lint, test]
     steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
       - name: Checkout repository
         uses: actions/checkout@v3
 
